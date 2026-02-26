@@ -54,11 +54,12 @@ void GPIO_SetOutput (GPIO_TYPE *GPIOx, uint8_t pin, uint8_t type);
 void GPIO_SPEED 		(GPIO_TYPE *GPIOx, uint8_t pin, uint8_t speed); 
 void GPIO_SetPull 	(GPIO_TYPE *GPIOx, uint8_t pin, uint8_t pull);
 void GPIO_Set_AFRH 	(GPIO_TYPE *GPIOx, uint8_t pin, uint8_t afrh); 
-void GPIO_Set_AFRL	(GPIO_TYPE *GPIOx, uint8_t pin, uint8_t afrl)
+void GPIO_Set_AFRL	(GPIO_TYPE *GPIOx, uint8_t pin, uint8_t afrl);
 
 // main function 
 void GPIO_Config_SPI1(void); 
 void GPIO_Config_Analog(void); 
 void GPIO_Config_Buzzer_Output(void);
 void GPIO_Config_Motor_Output(void);
+void GPIO_Config_Relay_Output(void);
 #endif //_GPIO_H

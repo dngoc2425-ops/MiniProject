@@ -1,5 +1,6 @@
 #include "GPIO.h"
 #include "RCC_STM32.h" 
+/* Define basic function */
 void GPIO_SetMode (GPIO_TYPE *GPIOx, uint8_t pin, uint8_t mode)
 {
 	GPIOx->MODER &= ~(0x3  << (pin * 2));
@@ -20,17 +21,17 @@ void GPIO_SetPull 	(GPIO_TYPE *GPIOx, uint8_t pin, uint8_t pull)
 	GPIOx->PUPDR  &= ~(0x3   << (pin * 2));
 	GPIOx->PUPDR  |=  (pull  << (pin * 2));
 }
-void GPIO_Set_AFRH 		(GPIO_TYPE *GPIOx, uint8_t pin, uint8_t afrh)
+void GPIO_Set_AFRH 	(GPIO_TYPE *GPIOx, uint8_t pin, uint8_t afrh)
 {
 	GPIOx->AFRH  &= ~(0x7   << pin);
 	GPIOx->AFRH  |=  (afrh  << pin);
 }
-void GPIO_Set_AFRL 		(GPIO_TYPE *GPIOx, uint8_t pin, uint8_t afrl)
+void GPIO_Set_AFRL 	(GPIO_TYPE *GPIOx, uint8_t pin, uint8_t afrl)
 {
 	GPIOx->AFRL  &= ~(0x7   << pin);
 	GPIOx->AFRL  |=  (afrl  << pin);
 }
-
+/* Config main function */
 void GPIO_Config_Analog(void)
 {
 	CLK_CONTROL->AHB1ENR |= (1 << 0);
@@ -39,15 +40,38 @@ void GPIO_Config_Analog(void)
 	GPIO_SetMode (GPIO_A_CONTROL, 2, GPIO_MODE_ANALOG);
 	GPIO_SetMode (GPIO_A_CONTROL, 3, GPIO_MODE_ANALOG);
 }
-void GPIO_Config_SPI1(void)
-{
-	
-}
+
 void GPIO_Config_Buzzer_Output(void)
 {
+	CLK_CONTROL->AHB1ENR |= (1 << 1); 
+	GPIO_SetMode 		(GPIO_B_CONTROL, 0, GPIO_MODE_OUTPUT);
+	GPIO_SetOutput	(GPIO_B_CONTROL, 0, GPIO_OUTPUT_PUSHPULL);
+	GPIO_SPEED			(GPIO_B_CONTROL, 0, GPIO_SPEED_LOW);
+	GPIO_SetPull		(GPIO_B_CONTROL, 0, GPIO_NO_UPDOWN);
 	
+	GPIO_B_CONTROL->BSRR = (1 << (0+16)); 
 }
 void GPIO_Config_Motor_Output(void)
+{
+	CLK_CONTROL->AHB1ENR |= (1 << 1);
+	GPIO_SetMode 		(GPIO_B_CONTROL, 1, GPIO_MODE_OUTPUT);
+	GPIO_SetOutput	(GPIO_B_CONTROL, 1, GPIO_OUTPUT_PUSHPULL);
+	GPIO_SPEED			(GPIO_B_CONTROL, 1, GPIO_SPEED_LOW);
+	GPIO_SetPull		(GPIO_B_CONTROL, 1, GPIO_NO_UPDOWN);
+	
+	GPIO_B_CONTROL->BSRR = (1 << (1+16)); 
+}
+void GPIO_Config_Relay_Output(void)
+{
+	CLK_CONTROL->AHB1ENR |= (1 << 1);
+	GPIO_SetMode 		(GPIO_B_CONTROL, 2, GPIO_MODE_OUTPUT);
+	GPIO_SetOutput	(GPIO_B_CONTROL, 2, GPIO_OUTPUT_PUSHPULL);
+	GPIO_SPEED			(GPIO_B_CONTROL, 2, GPIO_SPEED_LOW);
+	GPIO_SetPull		(GPIO_B_CONTROL, 2, GPIO_NO_UPDOWN);
+	
+	GPIO_B_CONTROL->BSRR = (1 << (2+16)); 
+}
+void GPIO_Config_SPI1(void)
 {
 	
 }
