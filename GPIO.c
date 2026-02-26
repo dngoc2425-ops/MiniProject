@@ -23,13 +23,13 @@ void GPIO_SetPull 	(GPIO_TYPE *GPIOx, uint8_t pin, uint8_t pull)
 }
 void GPIO_Set_AFRH 	(GPIO_TYPE *GPIOx, uint8_t pin, uint8_t afrh)
 {
-	GPIOx->AFRH  &= ~(0x7   << pin);
-	GPIOx->AFRH  |=  (afrh  << pin);
+	GPIOx->AFRH  &= ~(0xF   << (pin * 4));
+	GPIOx->AFRH  |=  (afrh  << (pin * 4));
 }
 void GPIO_Set_AFRL 	(GPIO_TYPE *GPIOx, uint8_t pin, uint8_t afrl)
 {
-	GPIOx->AFRL  &= ~(0x7   << pin);
-	GPIOx->AFRL  |=  (afrl  << pin);
+	GPIOx->AFRL  &= ~(0xF   << (pin * 4));
+	GPIOx->AFRL  |=  (afrl  << (pin * 4));
 }
 /* Config main function */
 void GPIO_Config_Analog(void)
@@ -73,7 +73,32 @@ void GPIO_Config_Relay_Output(void)
 }
 void GPIO_Config_SPI1(void)
 {
+	CLK_CONTROL->AHB1ENR |= (1 << 0);
+	CLK_CONTROL->APB2ENR |= (1 << 12);
+	GPIO_SetMode 		(GPIO_A_CONTROL, 4, GPIO_MODE_AF);
+	GPIO_SetMode 		(GPIO_A_CONTROL, 5, GPIO_MODE_AF);
+	GPIO_SetMode 		(GPIO_A_CONTROL, 6, GPIO_MODE_AF);
+	GPIO_SetMode 		(GPIO_A_CONTROL, 7, GPIO_MODE_AF);
 	
+	GPIO_Set_AFRL		(GPIO_A_CONTROL, 4, 5);
+	GPIO_Set_AFRL		(GPIO_A_CONTROL, 5, 5);
+	GPIO_Set_AFRL		(GPIO_A_CONTROL, 6, 5);
+	GPIO_Set_AFRL		(GPIO_A_CONTROL, 7, 5);
+	
+	GPIO_SetOutput	(GPIO_A_CONTROL, 4, GPIO_OUTPUT_PUSHPULL);
+	GPIO_SetOutput	(GPIO_A_CONTROL, 5, GPIO_OUTPUT_PUSHPULL);
+	GPIO_SetOutput	(GPIO_A_CONTROL, 6, GPIO_OUTPUT_PUSHPULL);
+	GPIO_SetOutput	(GPIO_A_CONTROL, 7, GPIO_OUTPUT_PUSHPULL);
+	
+	GPIO_SPEED			(GPIO_A_CONTROL, 4, GPIO_SPEED_HIGH);
+	GPIO_SPEED			(GPIO_A_CONTROL, 5, GPIO_SPEED_HIGH);
+	GPIO_SPEED			(GPIO_A_CONTROL, 6, GPIO_SPEED_HIGH);
+	GPIO_SPEED			(GPIO_A_CONTROL, 7, GPIO_SPEED_HIGH);
+	
+	GPIO_SetPull		(GPIO_A_CONTROL, 4, GPIO_NO_UPDOWN);
+	GPIO_SetPull		(GPIO_A_CONTROL, 5, GPIO_NO_UPDOWN);
+	GPIO_SetPull		(GPIO_A_CONTROL, 6, GPIO_NO_UPDOWN);
+	GPIO_SetPull		(GPIO_A_CONTROL, 7, GPIO_NO_UPDOWN);
 }
 
 
